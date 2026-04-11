@@ -57,7 +57,7 @@ def get_bitable_records(token):
 
 def fetch_media_urls(token, batch):
     url = "https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url"
-    extra_json = json.dumps({"bitablePerm": {"tableId": TABLE_ID}})
+    extra_json = json.dumps({"bitablePerm": {"tableId": TABLE_ID}}, separators=(',', ':'))
     params = f"extra={urllib.parse.quote(extra_json)}"
     for t in batch:
         params += f"&file_tokens={t}"
