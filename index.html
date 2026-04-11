@@ -450,7 +450,7 @@ var activeVideo = null;
 
 async function init() {
   try {
-    var basePath = window.location.protocol === 'file:' ? './api/videos.json' : '/api/videos.json';
+    var basePath = './api/videos.json';
     var response = await fetch(basePath);
     if (!response.ok) throw new Error('Data not available');
     videoData = await response.json();
