@@ -30,9 +30,11 @@ def get_bitable_records(token):
 
     while has_more:
         try:
-            page_url = url
+            params = "page_size=100"
             if page_token:
-                page_url += f"?page_token={page_token}"
+                params += f"&page_token={page_token}"
+            page_url = f"{url}?{params}"
+            print(f"  Requesting: {page_url}")
             req = urllib.request.Request(page_url, headers={"Authorization": f"Bearer {token}"})
             with urllib.request.urlopen(req) as response:
                 res = json.loads(response.read())
@@ -42,8 +44,12 @@ def get_bitable_records(token):
                     has_more = data.get("has_more", False)
                     page_token = data.get("page_token", "")
                 else:
-                    print(f"Failed to fetch records: {res}")
+                    print(f"Failed to fetch records: code={res.get('code')} msg={res.get('msg')}")
                     break
+        except urllib.error.HTTPError as e:
+            body = e.read().decode("utf-8", errors="replace")
+            print(f"Bitable API exception: HTTP {e.code} - {body}")
+            break
         except Exception as e:
             print(f"Bitable API exception: {e}")
             break
